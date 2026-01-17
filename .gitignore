@@ -39,11 +39,6 @@ lerna-debug.log*
 Thumbs.db
 *.tmp
 
-# Package manager
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
 # Testing
 coverage/
 .nyc_output/

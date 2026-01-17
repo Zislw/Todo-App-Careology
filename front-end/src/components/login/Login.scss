@@ -1,0 +1,15 @@
+.login{
+   width: 50%; 
+   text-align: center;  
+   border: 1px solid #ccc;
+   padding: 20px;
+}
+
+.login .ui.form .field input,
+.login .ui.form button {
+  width: 100%;
+}
+
+.login .ui.form button {
+  margin-top: 10px;
+}

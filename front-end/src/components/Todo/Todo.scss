@@ -1,0 +1,36 @@
+#todo{
+   float: left;
+   margin:4px;
+   height:200px;
+  
+   
+}
+/* #todo :hover{
+    background-color: ;
+} */
+
+.mobile-date-format {
+  display: none;
+}
+
+input[type="text"] {
+  &:focus {
+    border-bottom: 1px solid #00b5ad !important;
+  }
+  
+  &::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-date {
+    display: none !important;
+  }
+  
+  .mobile-date-format {
+    display: inline !important;
+  }
+}
+
