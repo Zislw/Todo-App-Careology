@@ -4,13 +4,13 @@ import './AddTaskButton.scss';
 const AddTaskButton = () => {
   const navigate = useNavigate();
 
-  const addTodo = () => {
-    navigate("/myToDoList/addToDo");
+  const handleAddTodo = () => {
+    navigate("/myTodoList/addTodo");
   }
 
   return (
-    <div id="addTask">
-      <button className="ui teal button" onClick={addTodo} type="button">
+    <div className="addTask">
+      <button className="ui teal button" onClick={handleAddTodo} type="button">
         + Add task
       </button>
     </div>

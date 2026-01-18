@@ -58,7 +58,6 @@ GO
 CREATE TABLE [PRIORITY](
     uid UNIQUEIDENTIFIER PRIMARY KEY,
     name VARCHAR(100),
-    [priority] INT,
     isActive BIT DEFAULT(1)
 );
 GO
@@ -82,10 +81,10 @@ GO
 
 #### 4. Insert Default Priority Values
 ```sql
-INSERT INTO [PRIORITY](uid, name, [priority]) VALUES
-(NEWID(), 'high', 1),
-(NEWID(), 'medium', 2),
-(NEWID(), 'low', 3);
+INSERT INTO [PRIORITY](uid, name) VALUES
+(NEWID(), 'high'),
+(NEWID(), 'medium'),
+(NEWID(), 'low');
 GO
 ```
 
@@ -204,6 +203,44 @@ The server will run on [http://localhost:4000](http://localhost:4000)
 |--------|----------|-------------|
 | GET | `/tasks/priorities` | Get all priorities |
 
+## Authentication
+
+The backend uses a simple authentication system with:
+
+### Password Security
+- Passwords are hashed using **bcrypt** with 10 salt rounds
+- Never stored in plain text
+- Compared securely during login
+
+### Protected Routes
+All `/tasks/*` endpoints require authentication via `x-user-id` header:
+
+```bash
+curl -X GET "http://localhost:4000/tasks/getAllTasks/USER_UID" \
+  -H "x-user-id: USER_UID_HERE"
+```
+
+### Registration Process
+1. User submits email and password
+2. Backend hashes password with bcrypt
+3. User record created with hashed password
+4. User ID returned for future requests
+
+### Login Process
+1. User submits email and password
+2. Backend retrieves hashed password
+3. bcrypt compares submitted password with hash
+4. On success, returns user ID
+5. Frontend stores user ID for authenticated requests
+
+### Security Notes
+- ✅ Passwords hashed with bcrypt
+- ✅ User validation on protected routes
+- ✅ No passwords in responses
+- ⚠️ For production: Add session management or JWT tokens
+- ⚠️ For production: Add HTTPS
+- ⚠️ For production: Add rate limiting
+
 ## Project Structure
 
 ```
@@ -217,8 +254,6 @@ back-end/
 │   │   └── userRoutes.ts
 │   ├── db/            # Database connection
 │   │   └── connection.ts
-│   ├── types/         # TypeScript types
-│   │   └── index.ts
 │   └── server.ts      # Entry point
 ├── dist/              # Compiled JavaScript (after build)
 ├── .env               # Environment variables (create this)
@@ -356,7 +391,6 @@ TASK
 PRIORITY
 ├── uid (PK)
 ├── name (high/medium/low)
-├── priority (1/2/3)
 └── isActive
 ```
 
@@ -382,10 +416,3 @@ PRIORITY
   - Use parameterized queries (already implemented)
   - Don't commit `.env` file to git
   - Use environment-specific configurations
-
-## Learn More
-
-- [Express Documentation](https://expressjs.com/)
-- [TypeScript Documentation](https://www.typescriptlang.org/)
-- [SQL Server Documentation](https://docs.microsoft.com/en-us/sql/)
-- [Node.js mssql Package](https://www.npmjs.com/package/mssql)

@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import Todo, { TodoMode } from "../Todo/Todo";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppStateDto } from "../../dtos/state.dto";
 import { useEffect } from "react";
-import { getAllTasks } from "../../store/actions/MyToDoList";
+import { getAllTasks } from "../../store/actions/todoList";
 import {
   TableRow,
   TableHeaderCell,
@@ -12,16 +11,16 @@ import {
   Table,
   Icon,
 } from 'semantic-ui-react'
-import './MyToDoList.scss';
+import './MyTodoList.scss';
+import { MyTodoListProps } from "./types";
+import Todo from "../Todo/Todo";
+import { TodoMode } from "../Todo/types";
 
-interface MyToDoListProps {
-  showCompleted: boolean;
-}
 
-const MyToDoList = ({ showCompleted }: MyToDoListProps) => {
-  let currentUser = useSelector((state: AppStateDto) => state.currentUser);
-  let myToDoList = useSelector((state: AppStateDto) => state.myToDoList);
-  let searchWord = useSelector((state: AppStateDto) => state.searchWord);
+const MyTodoList = ({ showCompleted }: MyTodoListProps) => {
+  const currentUser = useSelector(({currentUser}: AppStateDto) => currentUser);
+  const myTodoList = useSelector(({myTodoList}: AppStateDto) => myTodoList);
+  const searchText = useSelector(({searchText}: AppStateDto) => searchText);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,17 +33,17 @@ const MyToDoList = ({ showCompleted }: MyToDoListProps) => {
     }
   }, [currentUser, dispatch, navigate]);
 
-  const filteredTasks = myToDoList?.filter((todo) => 
+  const filteredTasks = myTodoList?.filter((todo) => 
     todo.isCompleted === showCompleted && 
-    todo.title.toLowerCase().includes(searchWord.toLowerCase())
+    todo.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
     <div className="todo-list-section">
-      <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="todo-list-container">
+        <h2 className="todo-list-title">
           {showCompleted ? 'Tasks done' : 'Tasks to do'}
-          <Icon name="angle down" style={{ fontSize: '18px', color: '#666' }} />
+          <Icon name="angle down" className="title-icon" />
         </h2>
         
         <div>
@@ -71,10 +70,10 @@ const MyToDoList = ({ showCompleted }: MyToDoListProps) => {
             </TableHeader>
 
             <TableBody>
+              {!showCompleted && <Outlet />}
               {filteredTasks.map((todo) => {
                 return <Todo key={todo.uid} item={todo} mode={TodoMode.READ} />;
               })}
-              {!showCompleted && <Outlet />}
             </TableBody>
           </Table>
         </div>
@@ -83,4 +82,4 @@ const MyToDoList = ({ showCompleted }: MyToDoListProps) => {
   );
 };
 
-export default MyToDoList;
+export default MyTodoList;

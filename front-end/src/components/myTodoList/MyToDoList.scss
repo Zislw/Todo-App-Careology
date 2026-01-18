@@ -20,6 +20,22 @@
       color: #333;
     }
   }
+
+  .todo-list-container {
+    margin-bottom: 40px;
+  }
+
+  .todo-list-title {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .title-icon {
+      font-size: 18px;
+      color: #666;
+    }
+  }
 }
 
 .ui.table {

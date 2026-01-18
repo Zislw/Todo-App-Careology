@@ -1,33 +1,38 @@
 import { Request, Response } from 'express';
 import { pool } from '../db/connection';
+import bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 10;
 
 export const register = async (req: Request, res: Response) => {
   const { fullName, email, password } = req.body;
   try {
     // Check if user exists
-    const userCheck = await pool.request()
+    const userExists = await pool.request()
       .input('email', email)
       .query('SELECT * FROM [user] WHERE email = @email');
     
-    if (userCheck.recordset.length > 0) {
+    if (userExists.recordset.length) {
       return res.status(400).json({ message: 'User already exists' });
     }
     
-    // Create new user (storing password as plain text for simplicity)
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    
     const result = await pool.request()
       .input('fullName', fullName)
       .input('email', email)
-      .input('password', password)
+      .input('password', hashedPassword)
       .query(`INSERT INTO [user] (uid, fullName, email, password)
               OUTPUT INSERTED.uid, INSERTED.fullName, INSERTED.email
               VALUES (NEWID(), @fullName, @email, @password)`);
     
     res.status(201).json({ 
-      details: result.recordset[0], 
+      user: result.recordset[0], 
       message: 'User registered successfully' 
     });
-  } catch (err) {
-    res.status(500).json({ message: 'Registration failed', error: err });
+  } catch (error) {
+    res.status(500).json({ message: 'Registration failed', error });
   }
 };
 
@@ -36,18 +41,29 @@ export const login = async (req: Request, res: Response) => {
   try {
     const result = await pool.request()
       .input('email', email)
-      .input('password', password)
-      .query('SELECT uid, fullName, email FROM [user] WHERE email = @email AND password = @password');
+      .query('SELECT uid, fullName, email, password FROM [user] WHERE email = @email');
     
-    if (result.recordset.length === 0) {
+    if (!result.recordset.length) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     
+    const user = result.recordset[0];
+    
+    // Compare password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    
+    // Don't send password back
+    const { password: _, ...userWithoutPassword } = user;
+    
     res.status(200).json({ 
-      details: result.recordset[0], 
+      user: userWithoutPassword, 
       message: 'Login successful' 
     });
-  } catch (err) {
-    res.status(500).json({ message: 'Login failed', error: err });
+  } catch (error) {
+    res.status(500).json({ message: 'Login failed', error });
   }
 };

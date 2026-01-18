@@ -24,6 +24,36 @@ input[type="text"] {
   }
 }
 
+.todo-title-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+  padding: 4px 0;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+.priority-select {
+  width: 100%;
+}
+
+.priority-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  
+  i.icon {
+    margin: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .desktop-date {
     display: none !important;

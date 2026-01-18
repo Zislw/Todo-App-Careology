@@ -124,7 +124,3 @@ See detailed troubleshooting guides in:
 ## 📝 License
 
 This project is for educational purposes.
-
-## 👨‍💻 Author
-
-Naomi - Learning Project

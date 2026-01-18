@@ -9,8 +9,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<any>({});
 
-  let password = useRef<HTMLInputElement>(null);
-  let email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
 
   const validate = () => {
     const err: any = {};
@@ -30,7 +30,7 @@ const Login = () => {
     return isValid;
   };
 
-  const loginTodo = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       return;
@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   const navTodo = (): void => {
-    navigate("/myToDoList");
+    navigate("/myTodoList");
   };
 
   return (
@@ -59,14 +59,14 @@ const Login = () => {
         <div className="field">
           <label>Enter your email</label>
           <input placeholder="yours@example.com" ref={email} />
-          {errors.email && <span style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</span>}
+          {errors.email && <span className="error">{errors.email.message}</span>}
         </div>
         <div className="field">
           <label>Enter your password</label>
           <input type="password" ref={password} />
-          {errors.password && <span style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</span>}
+          {errors.password && <span className="error">{errors.password.message}</span>}
         </div>
-        <button className="ui teal button" onClick={loginTodo} type="submit">
+        <button className="ui teal button" onClick={handleLogin} type="submit">
           Login
         </button>
       </form>

@@ -1,43 +1,50 @@
+import axios from "axios";
 import { UserDto } from "../../dtos/user.dto";
-import { Action, eAction } from "../reducers/action";
-import { authService } from "../../services/authService";
+import { Action, eAction } from "../types/action";
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export const login = (user: UserDto, navTodo: Function) => {
     return async (dispatch: Function) => {
         try {
-            const loggedInUser = await authService.login(user.email!, user.password!);
-            dispatch(userLoginned(loggedInUser));
+            const response = await axios.post(`${API_URL}/users/login`, {
+                email: user.email,
+                password: user.password
+            });
+            
+            dispatch(userLoginned(response.data.user));
             navTodo();
         } catch (error: any) {
-            alert(error.message);
+            alert(error.response?.data?.message || 'Login failed');
         }
     }
 }
 
-export const userLoginned = (user: UserDto): Action => {
+const userLoginned = (user: UserDto): Action => {
     return {
-        type: eAction.USER_LOGGINED,
+        type: eAction.LOGIN,
         payload: user
     }
 }
 
-export const register = (user: UserDto, navToDo: Function) => {
+export const register = (user: UserDto, navTodo: Function) => {
     return async (dispatch: Function) => {
         try {
-            const newUser = await authService.register(
-                user.email!,
-                user.password!,
-                user.fullName!
-            );
-            dispatch(saveUser(newUser));
-            navToDo();
+            const response = await axios.post(`${API_URL}/users/register`, {
+                fullName: user.fullName,
+                email: user.email,
+                password: user.password
+            });
+            
+            dispatch(saveUser(response.data.user));
+            navTodo();
         } catch (error: any) {
-            alert(error.message);
+            alert(error.response?.data?.message || 'Registration failed');
         }
     }
 }
 
-export const saveUser = (user: UserDto): Action => {
+const saveUser = (user: UserDto): Action => {
     return {
         type: eAction.USER_ADDED,
         payload: user
@@ -45,18 +52,8 @@ export const saveUser = (user: UserDto): Action => {
 }
 
 export const logout = (): Action => {
-    authService.logout();
     return {
         type: eAction.LOGOUT,
         payload: null
     }
-}
-
-export const initializeAuth = () => {
-    return (dispatch: Function) => {
-        const user = authService.getCurrentUser();
-        if (user) {
-            dispatch(userLoginned(user));
-        }
-    };
 }

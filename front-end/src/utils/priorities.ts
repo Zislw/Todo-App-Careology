@@ -1,5 +1,5 @@
 export interface PriorityConfig {
-  backgroundColor: string;
+  backgroundColor?: string;
   label: string;
 }
 
@@ -12,7 +12,6 @@ export enum ePriority{
 export const getPriorityConfig = (priorityName?: string): PriorityConfig => {
   if (!priorityName) {
     return {
-      backgroundColor: '#F5F5F5',
       label: 'None'
     };
   }

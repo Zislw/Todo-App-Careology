@@ -21,10 +21,6 @@ app.use(cors({
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
 
-// Test route
-app.get('/', (req, res) => {
-  res.send('Server is running');
-});
 
 // Database connection and server start
 poolConnect.then(() => {

@@ -1,15 +1,10 @@
-import { ToDoDto } from "./todo.dto";
+import { PriorityDto } from "./priority.dto";
+import { TodoDto } from "./todo.dto";
 import { UserDto } from "./user.dto";
-
-export interface PriorityDto {
-    uid: string;
-    name: string;
-    priority: number;
-}
 
 export interface AppStateDto {
     currentUser: UserDto | null;
-    myToDoList: ToDoDto[];
-    searchWord: string;
+    myTodoList: TodoDto[];
+    searchText: string;
     priorities: PriorityDto[];
 }

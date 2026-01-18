@@ -1,69 +1,69 @@
 import { AppStateDto } from "../../dtos/state.dto"
-import { Action } from "./action"
+import { Action, eAction } from "../types/action"
 
 const initialState: AppStateDto = {
     currentUser: null,
-    myToDoList: [],
-    searchWord: "",
+    myTodoList: [],
+    searchText: "",
     priorities: []
 }
 
 export const todoListReducer = (state = initialState, {type, payload}: Action) => {
 
     switch (type) {
-        case "USER_LOGGINED":
+        case eAction.LOGIN:
             return {
                 ...state,
                 currentUser: payload
             }
 
-        case "USER_ADDED":
+        case eAction.USER_ADDED:
             return {
                 ...state,
                 currentUser: payload
             };
 
-        case "LOGOUT":
+        case eAction.LOGOUT:
             return {
                 ...state,
                 currentUser: null
             }
 
-        case "TASK_ADDED":
+        case eAction.TASK_ADDED:
             return {
                 ...state,
-                myToDoList: [...state.myToDoList, payload]
+                myTodoList: [...state.myTodoList, payload]
             }
 
-        case "ALL_TASKS_SAVED":
+        case eAction.ALL_TASKS_SAVED:
             return {
                 ...state,
-                myToDoList: [...payload]
+                myTodoList: [...payload]
             }
 
-        case "TASK_DELETED":
-            let arr = state.myToDoList.filter(t => t.uid !== payload)
+        case eAction.TASK_DELETED:
+            const updatedTodoList = state.myTodoList.filter(t => t.uid !== payload)
             return {
                 ...state,
-                myToDoList: [...arr]
+                myTodoList: [...updatedTodoList]
             }
 
-        case "TASK_UPDATED":
-            const updatedList = state.myToDoList.map(item => 
+        case eAction.TASK_UPDATED:
+            const updatedList = state.myTodoList.map(item => 
                 item.uid === payload.uid ? payload : item
             );
             return {
                 ...state,
-                myToDoList: updatedList
+                myTodoList: [...updatedList]
             }
 
-        case "SEARCH":
+        case eAction.SEARCH:
             return {
                 ...state,
-                searchWord: payload
+                searchText: payload
             }
 
-        case "ALL_PRIORITIES_SAVED":
+        case eAction.ALL_PRIORITIES_SAVED:
             return {
                 ...state,
                 priorities: [...payload]
@@ -72,5 +72,4 @@ export const todoListReducer = (state = initialState, {type, payload}: Action) =
         default:
             return state
     }
-
 }

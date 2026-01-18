@@ -4,7 +4,8 @@ import './App.scss';
 import Login from '../login/Login';
 import Register from '../register/register';
 import TodosPage from '../TodosPage/TodosPage';
-import Todo, { TodoMode } from '../Todo/Todo';
+import Todo from '../Todo/Todo';
+import { TodoMode } from '../Todo/types';
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="myToDoList" element={<TodosPage />}>
-          <Route path="addToDo" element={<Todo mode={TodoMode.CREATE} />} />
+        <Route path="myTodoList" element={<TodosPage />}>
+          <Route path="addTodo" element={<Todo mode={TodoMode.CREATE} />} />
         </Route>
         <Route path="*" element={null} />
       </Routes>

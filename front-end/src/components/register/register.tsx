@@ -15,8 +15,8 @@ const Register = () => {
 
   const [errors, setErr] = useState<any>({});
 
-  const navToDo = (): void => {
-    navigate("/myToDoList");
+  const navTodo = (): void => {
+    navigate("/myTodoList");
   };
 
   const validate = () => {
@@ -59,7 +59,7 @@ const Register = () => {
     return isValid;
   };
 
-  const registerTodo = (e: React.FormEvent) => {
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       return;
@@ -71,7 +71,7 @@ const Register = () => {
             email: email.current?.value,
             password: password.current?.value,
           },
-          navToDo
+          navTodo
         )
       );
     }
@@ -103,7 +103,7 @@ const Register = () => {
           <input type="password" ref={confirmPassword} />
           {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
         </div>
-        <button className="ui teal button" onClick={registerTodo} type="submit">
+        <button className="ui teal button" onClick={handleRegister} type="submit">
           Register
         </button>
       </form>
