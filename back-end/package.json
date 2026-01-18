@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts",
+    "setup-db": "ts-node src/db/setup-db.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
